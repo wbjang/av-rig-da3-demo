@@ -31,10 +31,14 @@ python -m ipykernel install --user --name av-rig-demo  # register the kernel for
 ```
 
 **Why `--no-deps` for DA3:** its declared dependency list pins `numpy<2` and pulls
-`open3d` (no Linux-aarch64 wheels exist) and `xformers` -- none of which inference
-needs. `requirements.txt` already contains DA3's actual runtime deps, verified by
-running the notebook end to end. pip may print a `numpy<2` / `xformers` incompatibility
-warning afterwards; it is benign.
+`open3d` (no Linux-aarch64 wheels exist), `xformers`, and a raft of server/export
+extras -- none of which inference needs. `requirements.txt` already contains DA3's
+actual runtime deps, verified by running the notebook end to end. Afterwards, every
+`pip install` in the venv will print resolver warnings like "depth-anything-3 requires
+e3nn / fastapi / open3d / opencv-python / pillow-heif / pre-commit / pycolmap / typer /
+uvicorn / xformers, which is not installed" and "requires numpy<2". **All benign**:
+those are unused extras (and `opencv-python-headless` provides the same `cv2` module
+pip claims is missing).
 
 Alternatively, instead of pip-installing DA3, clone its repo and point the notebook at
 it: `export DA3_SRC=/path/to/Depth-Anything-3/src`.
