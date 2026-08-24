@@ -1,0 +1,10 @@
+physical-ai-av
+DracoPy
+opencv-python-headless
+scipy
+pillow
+matplotlib
+imageio
+jupyter
+# plus: torch (per https://pytorch.org) and
+# pip install "git+https://github.com/ByteDance-Seed/Depth-Anything-3"
