@@ -22,21 +22,42 @@ Write-up with the full 14-scene study, ablations, and honest limitations:
 ## Setup
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate   # required on modern Debian/Ubuntu (PEP 668)
+git clone https://github.com/wbjang/av-rig-da3-demo.git && cd av-rig-da3-demo
+python3 -m venv .venv && source .venv/bin/activate     # required on modern Debian/Ubuntu (PEP 668)
 pip install -r requirements.txt
-pip install "git+https://github.com/ByteDance-Seed/Depth-Anything-3"
-# torch: install per https://pytorch.org for your platform
-python -m ipykernel install --user --name av-rig-demo   # register the kernel for Jupyter
+pip install torch torchvision                          # or the CUDA build for your platform, see pytorch.org
+pip install --no-deps "git+https://github.com/ByteDance-Seed/Depth-Anything-3"
+python -m ipykernel install --user --name av-rig-demo  # register the kernel for Jupyter
 ```
+
+**Why `--no-deps` for DA3:** its declared dependency list pins `numpy<2` and pulls
+`open3d` (no Linux-aarch64 wheels exist) and `xformers` -- none of which inference
+needs. `requirements.txt` already contains DA3's actual runtime deps, verified by
+running the notebook end to end. pip may print a `numpy<2` / `xformers` incompatibility
+warning afterwards; it is benign.
 
 Alternatively, instead of pip-installing DA3, clone its repo and point the notebook at
 it: `export DA3_SRC=/path/to/Depth-Anything-3/src`.
 
+## Data access
+
 The dataset is **gated**: request access on the
 [dataset page](https://huggingface.co/datasets/nvidia/PhysicalAI-Autonomous-Vehicles),
-then `huggingface-cli login`. First access streams from HF and caches locally
-(a clip's worth of data is a few hundred MB). A GPU with ~4 GB runs DA3-Large at the
-resolution used here.
+then:
+
+```bash
+huggingface-cli login
+```
+
+That is all the notebook needs: it **streams** exactly what it uses (byte-range reads)
+and caches locally, a few hundred MB for the demo clip. There is also a bulk
+pre-download API (`PhysicalAIAVDatasetInterface().download_clip_features(clip_id,
+[features...])`), but be aware it fetches entire multi-clip chunk files -- about
+**38 GB** for the demo clip's chunks -- so prefer the streaming default unless you want
+the data offline.
+
+The DA3-Large weights (~1.4 GB) download automatically from HF on first
+`from_pretrained`. A GPU with ~4 GB runs DA3-Large at the resolution used here.
 
 ## Expected results (clip `07721315`)
 

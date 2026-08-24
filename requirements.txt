@@ -1,3 +1,4 @@
+# dataset access + demo
 physical-ai-av
 DracoPy
 opencv-python-headless
@@ -7,5 +8,17 @@ matplotlib
 imageio
 jupyter
 ipykernel
-# plus: torch (per https://pytorch.org) and
-# pip install "git+https://github.com/ByteDance-Seed/Depth-Anything-3"
+# Depth Anything 3 runtime deps (DA3 itself is installed with --no-deps, see README:
+# its full dependency list pins numpy<2 and pulls open3d/xformers, which inference
+# does not need and which have no aarch64 wheels)
+einops
+omegaconf
+moviepy<2
+addict
+plyfile
+trimesh
+evo
+safetensors
+huggingface_hub
+# NOT listed here: torch + torchvision -- install the build for your platform
+# from https://pytorch.org (any recent CUDA or CPU build works)
