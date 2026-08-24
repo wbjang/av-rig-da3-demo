@@ -22,9 +22,11 @@ Write-up with the full 14-scene study, ablations, and honest limitations:
 ## Setup
 
 ```bash
+python3 -m venv .venv && source .venv/bin/activate   # required on modern Debian/Ubuntu (PEP 668)
 pip install -r requirements.txt
 pip install "git+https://github.com/ByteDance-Seed/Depth-Anything-3"
 # torch: install per https://pytorch.org for your platform
+python -m ipykernel install --user --name av-rig-demo   # register the kernel for Jupyter
 ```
 
 Alternatively, instead of pip-installing DA3, clone its repo and point the notebook at
