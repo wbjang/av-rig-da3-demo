@@ -43,6 +43,13 @@ pip claims is missing).
 Alternatively, instead of pip-installing DA3, clone its repo and point the notebook at
 it: `export DA3_SRC=/path/to/Depth-Anything-3/src`.
 
+Two harmless things you may see: a one-time `gsplat` warning when DA3 is imported
+(3DGS rendering support, unused here), and -- on aarch64 -- `pycolmap` cannot be
+installed at all (no wheels exist); the notebook stubs it before importing DA3, since
+it is only needed for COLMAP export. If you import `depth_anything_3.api` outside the
+notebook, stub it the same way:
+`python -c "import sys, types; sys.modules.setdefault('pycolmap', types.ModuleType('pycolmap')); import depth_anything_3.api"`.
+
 ## Data access
 
 The dataset is **gated**: request access on the
